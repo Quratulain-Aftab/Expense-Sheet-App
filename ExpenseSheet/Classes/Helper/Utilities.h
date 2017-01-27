@@ -19,4 +19,5 @@
 -(NSString*)getUpdatedSettingsForString:(NSString *)key;
 - (void)updateSettingsstring:(NSString*)value forKey:(NSString *)key;
 - (void)updateSettings:(BOOL)value forKey:(NSString *)key;
+-(UIColor *)backgroundColorWithAlpha:(float)alpha;
 @end

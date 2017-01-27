@@ -109,6 +109,54 @@
   
     return color;
 }
+-(UIColor *)backgroundColorWithAlpha:(float)alpha
+{
+    NSInteger theme=[[self getUpdatedSettingsForString:ThemeKey] integerValue];
+    UIColor *color;
+    
+    if(theme==0)
+    {
+        
+        color=[UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:alpha];
+    }
+    else if (theme==1)
+    {
+        //  R: 81 G: 118 B: 162
+        color=[UIColor colorWithRed:81.0/255.0 green:118.0/255.0 blue:162.0/255.0 alpha:alpha];
+        
+    }
+    else if (theme==2)
+    {
+        // R: 129 G: 87 B: 89
+        color=[UIColor colorWithRed:129.0/255.0 green:87.0/255.0 blue:89.0/255.0 alpha:alpha];
+        
+    }
+    else if (theme==3)
+    {
+        //  R: 216 G: 101 B: 96
+        color=[UIColor colorWithRed:216.0/255.0 green:101.0/255.0 blue:96.0/255.0 alpha:alpha];
+        
+    }
+    else if (theme==4)
+    {
+        //	R: 37 G: 52 B: 91
+        color=[UIColor colorWithRed:37.0/255.0 green:52.0/255.0 blue:91.0/255.0 alpha:alpha];
+    }
+    else if (theme==5)
+    {  color=[UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:0.7];
+        
+    }
+    else
+    {
+        //  R: 149 G: 79 B: 95
+        
+        color=[UIColor colorWithRed:149.0/255.0 green:79.0/255.0 blue:95.0/255.0 alpha:alpha];
+        
+    }
+    
+    return color;
+}
+
 #pragma mark - Move to Directory
 
 - (void)moveToDocumentDirectory:(NSString *)fileName

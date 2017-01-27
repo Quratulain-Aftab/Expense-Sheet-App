@@ -182,16 +182,6 @@
     isSelected=true;
     row=indexPath.row;
     [self dismissViewControllerAnimated:NO completion:nil];
- //    if(tableView==self.weeklyTable)
-//    {
-//        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//        NSManagedObject *sheetItem = [self.dataSource objectAtIndex:indexPath.row];
-//        self.detailTitleText=[sheetItem valueForKey:DetailDescription];
-//        isEditButtonClicked=YES;
-//        self.ItemId=indexPath.row;
-//        self.mode=3;
-//        [self performSegueWithIdentifier:@"detailsegue" sender:nil];
-//    }
     
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
