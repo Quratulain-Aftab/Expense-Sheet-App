@@ -102,10 +102,26 @@
 #pragma mark -
 - (IBAction)goButtonAction:(id)sender {
     
-    [self performSegueWithIdentifier:@"homesegue" sender:nil];
+    if([self.passcodeField.text isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"Passcode"]])
+        {
+            [self performSegueWithIdentifier:@"homesegue" sender:nil];
+        }
+        else
+        {
+            UIAlertController *alert=[UIAlertController alertControllerWithTitle:nil message:@"Incorrect Passcode" preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction=[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
+            
+            [alert addAction:okAction];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     
 }
 - (IBAction)forgotButtonAction:(id)sender {
+    
+    [self.passcodeField resignFirstResponder];
+    [self.emailTextfield becomeFirstResponder];
     
     [self.EnterPasscodeView setHidden:YES];
     
@@ -170,7 +186,7 @@
 }
 -(BOOL) textFieldShouldEndEditing:(UITextField *)textField
 {
-        self.loginviewTop.constant=200;
+     //   self.loginviewTop.constant=200;
     //This'll Show The cancelButton with Animation
     return YES;
 }
@@ -190,11 +206,41 @@
 }
 -(bool)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    self.loginviewTop.constant=20;
+    
     if(textField==self.passcodeField)
     {
+        if(string.length==0)
+        {
+            return YES;
+        }
         if(textField.text.length==3)
         {
+          NSString *currentString = [self.passcodeField.text stringByReplacingCharactersInRange:range withString:string];
+            
+             //NSLog(@"passcode textfield text is %@",self.passcodeField.text);
+            // NSLog(@"passcode enetered is %@",self.passcodeField.text);
+            NSLog(@"passcode enetered is %@",currentString);
+            
+            if( [currentString isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"Passcode"]])
+        {
              [self performSegueWithIdentifier:@"homesegue" sender:nil];
+        }
+        else
+        {
+            UIAlertController *alert=[UIAlertController alertControllerWithTitle:nil message:@"Incorrect Passcode" preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction=[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
+            
+            [alert addAction:okAction];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        }
+      
+        else if (textField.text.length>3)
+        {
+            return NO;
         }
     }
     else if (self.emailTextfield.text.length>3 && self.passwordTextfield.text.length>3)

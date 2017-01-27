@@ -372,6 +372,11 @@
 - (IBAction)settingsButtonAction:(id)sender {
     [self performSegueWithIdentifier:@"SettingsSegue" sender:nil];
 }
+- (IBAction)summaryButtonAction:(id)sender {
+    [self performSegueWithIdentifier:@"SummarySegue" sender:nil];
+
+    
+}
 
 #pragma mark - MyExpensesheetsView Buttons
 - (IBAction)searchButtonAction:(id)sender {

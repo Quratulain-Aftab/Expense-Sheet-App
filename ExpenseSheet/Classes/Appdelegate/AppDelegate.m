@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "Utilities.h"
+#import "HomeViewController.h"
 //#import "ExpenseSheetDetailViewController.h"
 @interface AppDelegate ()
 @end
@@ -22,6 +23,8 @@
     [self resetTempUserDefaults];
     
     [[Utilities shareManager] moveToDocumentDirectory:SettingsFileName];
+    
+    NSLog(@"count is %lu",[UIApplication sharedApplication].scheduledLocalNotifications.count);
     
     // 3D touch handling on home screen app icon
 //    UIApplicationShortcutIcon * photoIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"disclosure.png"]; // your customize icon
@@ -38,12 +41,24 @@
     {
         [self handleNotification:notification];
     }
+    else
+    {
+        if([[Utilities shareManager]getUpdatedSettings:LockKey]==YES)
+        {
+            
+        }
+        else
+        {
+           UINavigationController *navigationController= (UINavigationController *)self.window.rootViewController;
+            
+            UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            HomeViewController *homevc=[storyboard instantiateViewControllerWithIdentifier:@"homeVC"];
+            [navigationController setViewControllers:@[homevc] animated:NO];
+    
+        }
+    }
     application.applicationIconBadgeNumber = 0;
-
-
     return ![self handleShortCutItem:shortcutItem];
-
-
     return YES;
 }
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -197,6 +212,8 @@
 -(void)setupLocalNotifications
 {
     
+    [[UIApplication sharedApplication]cancelAllLocalNotifications];
+    
     NSString *notificationDay, *notificationType, *notificationTime, *notificationAlertText;
     
     notificationDay=[[Utilities shareManager] getUpdatedSettingsForString:NotificationDayKey];
@@ -220,27 +237,18 @@
         hour=12+hour;
     }
     
-    if([notificationType isEqualToString:@"Weekly"])
-    {
-    }
-    else if([notificationType isEqualToString:@"Monthly"])
-    {
-    }
-    else
-    {
-    }
+    
     
     NSArray *notificationArray=[[UIApplication sharedApplication]scheduledLocalNotifications];
         for(UILocalNotification *notification in notificationArray)
         {
     
-            [[UIApplication sharedApplication] cancelLocalNotification:notification ];
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
     
         NSDate *fireDate=[NSDate date];
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSDateComponents *comp = [[NSCalendar currentCalendar] components:(NSCalendarUnitYear |  NSCalendarUnitHour | NSCalendarUnitMonth| NSCalendarUnitSecond | NSCalendarUnitWeekOfYear) fromDate:fireDate];
-        [comp setWeekday:[notificationDay integerValue]];
         [comp setHour:hour];
         [comp setMinute:min];
         [comp setSecond:0];
@@ -248,11 +256,28 @@
         UILocalNotification *localNotif = [[UILocalNotification alloc] init];
         localNotif.fireDate = fireDate;
         localNotif.timeZone = [NSTimeZone localTimeZone];
-        localNotif.repeatInterval = NSCalendarUnitWeekOfYear;
+    if([notificationType isEqualToString:@"Weekly"])
+    {
+          localNotif.repeatInterval = NSCalendarUnitWeekOfYear;
+        [comp setWeekday:[notificationDay integerValue]];
+
+    }
+    else if([notificationType isEqualToString:@"Monthly"])
+    {
+         localNotif.repeatInterval = NSCalendarUnitMonth;
+        [comp setDay:[notificationDay integerValue]+1];
+    }
+    else
+    {
+         localNotif.repeatInterval = NSCalendarUnitDay;
+    }
+    
         localNotif.alertBody=notificationAlertText;
         localNotif.alertTitle=APP_NAME;
         NSLog(@" date %lu",kCFCalendarUnitDay);
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    
+    NSLog(@"count is %lu",[UIApplication sharedApplication].scheduledLocalNotifications.count);
 }
 #pragma mark Handle peek
 - (BOOL)handleShortCutItem:(UIApplicationShortcutItem *)shortcutItem {

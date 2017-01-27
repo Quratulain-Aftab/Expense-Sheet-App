@@ -13,7 +13,7 @@
 	<key>selectedTheme</key>
 	<string>0</string>
 	<key>notificationsType</key>
-	<string>Weekly</string>
+	<string>Monthly</string>
 	<key>startWeekDay</key>
 	<string>1</string>
 	<key>notificationTime</key>

@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *confirmField;
 @property (weak, nonatomic) IBOutlet UITextField *previousField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *previousViewHeight;
+@property (weak, nonatomic) IBOutlet UIButton *previousPasscodeDoneButton;
 
 
 @end

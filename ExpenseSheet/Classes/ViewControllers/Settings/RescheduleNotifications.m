@@ -9,6 +9,7 @@
 #import "RescheduleNotifications.h"
 #import "Constants.h"
 #import "Utilities.h"
+#import "AppDelegate.h"
 #import "UIButton+button.h"
 
 @interface RescheduleNotifications ()
@@ -140,7 +141,11 @@
     
     [[Utilities shareManager]updateSettingsstring:typeString forKey:NotificationTypeKey];
     
+    [self performSelectorInBackground:@selector(rescheduleNotifications) withObject:nil];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+  
 }
 #pragma mark -
 #pragma mark === UITextfield Delegate ===
@@ -173,9 +178,11 @@
 {
     if(self.typeSegmentView.selectedSegmentIndex==1)
     {
+        // weekly
         notificationDay=row;
         return;
     }
+    // monthly
     notificationDay=row+1;
 }
 #pragma mark - Segment Value Changed
@@ -217,5 +224,11 @@
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
     [self.reminderTextField resignFirstResponder];
+}
+-(void)rescheduleNotifications
+{
+    AppDelegate *appDelegate=(AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate setupLocalNotifications];
 }
 @end

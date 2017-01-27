@@ -72,6 +72,13 @@
 #pragma mark === Buttons Action ===
 #pragma mark -
 - (IBAction)backButtonAction:(id)sender {
+    
+//    SettingsCell *soundEffectsCell=(SettingsCell *)[self.settingsTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+//    [[Utilities shareManager]updateSettings:soundEffectsCell.soundEffectsSwitch.on forKey:SoundEffectsKey];
+//    
+//    SettingsCell *lockCell=(SettingsCell *)[self.settingsTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:6 inSection:0]];
+//    [[Utilities shareManager]updateSettings:lockCell.lockSwitch.on forKey:LockKey];
+    
      [self dismissViewControllerAnimated:YES completion:nil];
 }
 #pragma mark -
@@ -98,11 +105,15 @@
     {
         cell.soundEffectsSwitch.on=soundEffects;
         cell.soundEffectsSwitch.onTintColor=[[Utilities shareManager] backgroundColor];
+        [cell.soundEffectsSwitch addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.soundEffectsSwitch.tag=4;
     }
     else if (indexPath.row==6)
     {
         cell.lockSwitch.on=lock;
         cell.lockSwitch.onTintColor=[[Utilities shareManager] backgroundColor];
+        [cell.lockSwitch addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.lockSwitch.tag=6;
     }
     
     UIView *selectedBackgorundView=[[UIView alloc]initWithFrame:cell.bounds];
@@ -187,5 +198,17 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath;
     NSDateFormatter * dateFormatter = [NSDateFormatter new];
     dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     return dateFormatter.shortMonthSymbols[monthday];
+}
+-(void)valueChanged:(UISwitch *)Switch
+{
+    
+    if(Switch.tag==4)
+    {
+        [[Utilities shareManager]updateSettings:Switch.on forKey:SoundEffectsKey];
+    }
+    else
+    {
+        [[Utilities shareManager]updateSettings:Switch.on forKey:LockKey];
+    }
 }
 @end

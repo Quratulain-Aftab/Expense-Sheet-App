@@ -33,6 +33,9 @@
 		5AECD2AF1E1B8CA4000CA3F8 /* DetailPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AECD2AE1E1B8CA4000CA3F8 /* DetailPreviewViewController.m */; };
 		757E2A5B1DDD8231005D43FF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 757E2A5A1DDD8231005D43FF /* main.m */; };
 		75BED0DD1DE6BF8E00D71E97 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75BED0DC1DE6BF8E00D71E97 /* LocalAuthentication.framework */; };
+		82827D9E1E3A12940073F8FF /* SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827D9D1E3A12940073F8FF /* SummaryViewController.m */; };
+		82827DA21E3A1A280073F8FF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827DA11E3A1A280073F8FF /* XYPieChart.m */; };
+		82827DA51E3A28AD0073F8FF /* SummaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827DA41E3A28AD0073F8FF /* SummaryCell.m */; };
 		A4004C571E260F5200FFB380 /* WeekStartDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4004C561E260F5200FFB380 /* WeekStartDayViewController.m */; };
 		A4004C591E26142D00FFB380 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4004C581E26142D00FFB380 /* Settings.plist */; };
 		A4004C5C1E262F6900FFB380 /* RescheduleNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A4004C5B1E262F6900FFB380 /* RescheduleNotifications.m */; };
@@ -136,6 +139,12 @@
 		757E2A5A1DDD8231005D43FF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		757E2A6D1DDD8231005D43FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75BED0DC1DE6BF8E00D71E97 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		82827D9C1E3A12940073F8FF /* SummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryViewController.h; sourceTree = "<group>"; };
+		82827D9D1E3A12940073F8FF /* SummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryViewController.m; sourceTree = "<group>"; };
+		82827DA01E3A1A280073F8FF /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		82827DA11E3A1A280073F8FF /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
+		82827DA31E3A28AD0073F8FF /* SummaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryCell.h; sourceTree = "<group>"; };
+		82827DA41E3A28AD0073F8FF /* SummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryCell.m; sourceTree = "<group>"; };
 		A4004C551E260F5200FFB380 /* WeekStartDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekStartDayViewController.h; sourceTree = "<group>"; };
 		A4004C561E260F5200FFB380 /* WeekStartDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekStartDayViewController.m; sourceTree = "<group>"; };
 		A4004C581E26142D00FFB380 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Settings.plist; path = ../Settings.plist; sourceTree = "<group>"; };
@@ -249,6 +258,8 @@
 				A4E187E21E2F94F3005DE1DA /* ThemeCell.m */,
 				A4F218F51E309360001A3158 /* SettingsCell.h */,
 				A4F218F61E309360001A3158 /* SettingsCell.m */,
+				82827DA31E3A28AD0073F8FF /* SummaryCell.h */,
+				82827DA41E3A28AD0073F8FF /* SummaryCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -256,6 +267,7 @@
 		5A860AEA1E140E8A00B44D49 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				82827D9F1E3A1A280073F8FF /* XYPieChart */,
 				A4D63DB51E25103F0053B741 /* UIButton+button.h */,
 				A4D63DB61E25103F0053B741 /* UIButton+button.m */,
 				5ACEFFEA1E14156400C3FCD4 /* MBProgressHUD.h */,
@@ -284,6 +296,7 @@
 		5A860AF01E140E8A00B44D49 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				82827D9B1E3A12940073F8FF /* Summary */,
 				A4B5FE0E1E27523900457C0A /* Calendar */,
 				5AECD2A51E1B8B1A000CA3F8 /* About us */,
 				5AECD2A61E1B8B1A000CA3F8 /* Settings */,
@@ -473,6 +486,24 @@
 				A4979EC41E1CF426005B4B2F /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		82827D9B1E3A12940073F8FF /* Summary */ = {
+			isa = PBXGroup;
+			children = (
+				82827D9C1E3A12940073F8FF /* SummaryViewController.h */,
+				82827D9D1E3A12940073F8FF /* SummaryViewController.m */,
+			);
+			path = Summary;
+			sourceTree = "<group>";
+		};
+		82827D9F1E3A1A280073F8FF /* XYPieChart */ = {
+			isa = PBXGroup;
+			children = (
+				82827DA01E3A1A280073F8FF /* XYPieChart.h */,
+				82827DA11E3A1A280073F8FF /* XYPieChart.m */,
+			);
+			path = XYPieChart;
 			sourceTree = "<group>";
 		};
 		A4979EC61E1CF426005B4B2F /* ExpenseSheetWidget */ = {
@@ -721,6 +752,7 @@
 				5A860B0C1E140E8A00B44D49 /* CreateViewCell1.m in Sources */,
 				5ACEFFEF1E14160800C3FCD4 /* ExpenseSheet.xcdatamodeld in Sources */,
 				5ACEFFEC1E14156400C3FCD4 /* MBProgressHUD.m in Sources */,
+				82827DA21E3A1A280073F8FF /* XYPieChart.m in Sources */,
 				A4D63DAF1E2503030053B741 /* SettingBackgroundViewController.m in Sources */,
 				A4E187E31E2F94F3005DE1DA /* ThemeCell.m in Sources */,
 				A4F319FC1E2F30850036E9C4 /* Communication.m in Sources */,
@@ -733,6 +765,7 @@
 				5ACEFFF51E142BB700C3FCD4 /* DetailViewController.m in Sources */,
 				5AECD2A41E1B6D04000CA3F8 /* SheetPreviewViewController.m in Sources */,
 				A4004C571E260F5200FFB380 /* WeekStartDayViewController.m in Sources */,
+				82827D9E1E3A12940073F8FF /* SummaryViewController.m in Sources */,
 				A4F58BE71E28E96300C409A2 /* ReceiptCollectionViewCell.m in Sources */,
 				5A860B151E140E8A00B44D49 /* HomeViewController.m in Sources */,
 				A4B5FE141E275EE800457C0A /* Model.m in Sources */,
@@ -751,6 +784,7 @@
 				5A860B0E1E140E8A00B44D49 /* DayCell.m in Sources */,
 				5A860B121E140E8A00B44D49 /* AddMoreViewController.m in Sources */,
 				5A860B111E140E8A00B44D49 /* Model.xcdatamodeld in Sources */,
+				82827DA51E3A28AD0073F8FF /* SummaryCell.m in Sources */,
 				757E2A5B1DDD8231005D43FF /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
