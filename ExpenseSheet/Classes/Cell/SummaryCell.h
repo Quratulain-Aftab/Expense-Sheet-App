@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface SummaryCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *amountLabel;
 
 @end

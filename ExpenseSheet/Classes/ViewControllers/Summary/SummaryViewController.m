@@ -10,6 +10,8 @@
 #import "Utilities.h"
 #import "Model.h"
 #import "SummaryCell.h"
+#import "Constants.h"
+#import "MBProgressHUD.h"
 
 @interface SummaryViewController ()
 @property NSMutableArray *slices;
@@ -17,6 +19,14 @@
 @end
 
 @implementation SummaryViewController
+{
+    NSMutableArray *dataSource;
+    NSDateFormatter *df;
+    NSMutableArray *categoriesList;
+    NSMutableArray *occuranceList;
+    
+    NSDate *currentDate;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -42,36 +52,45 @@
 }
 -(void)makeUIAdjustments
 {
+    occuranceList=[[NSMutableArray alloc]init];
+    categoriesList=[[NSMutableArray alloc]init];
+
+    currentDate=[self getFirstDateOfMonth:[NSDate date]];
+    dataSource=[[Model fetchDataFromTable:ExpenseSheetDetailTable withStartDate:[self getFirstDateOfMonth:[NSDate date]] andEndDate:[self getLastDateOfMonth:[NSDate date]]] mutableCopy];
+    
+    [self getGraphInfo];
     
     self.titleView.backgroundColor=[[Utilities shareManager]backgroundColor];
     self.titleView.layer.shadowOffset = CGSizeMake(0, 5);
     self.titleView.layer.shadowRadius = 2;
     self.titleView.layer.shadowOpacity = 0.3;
     
+    // ------- Gestures
+    UISwipeGestureRecognizer *leftSwipeGestue = [[UISwipeGestureRecognizer alloc] initWithTarget:self  action:@selector(leftSwipeHandler:)];
+    leftSwipeGestue.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:leftSwipeGestue];
+    
+    
+    UISwipeGestureRecognizer *rightSwipeGestue = [[UISwipeGestureRecognizer alloc] initWithTarget:self  action:@selector(rightSwipeHandler:)];
+    rightSwipeGestue.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:rightSwipeGestue];
+    
+
+    
     
     // make chart
     self.slices = [NSMutableArray arrayWithCapacity:10];
     
-    for(int i = 0; i < 5; i ++)
-    {
-        NSNumber *one = [NSNumber numberWithInt:rand()%60+20];
-        [_slices addObject:one];
-    }
+//    for(int i = 0; i < 5; i ++)
+//    {
+//        NSNumber *one = [NSNumber numberWithInt:rand()%60+20];
+//        [_slices addObject:one];
+//    }
     self.pieChart.backgroundColor=[UIColor clearColor];
     [self.pieChart setDelegate:self];
     [self.pieChart setDataSource:self];
- //   [self.pieChart setPieCenter:CGPointMake(240, 240)];
-    [self.pieChart setShowPercentage:NO];
+    [self.pieChart setShowPercentage:YES];
     [self.pieChart setLabelColor:[UIColor blackColor]];
-    
-   // [self.percentageLabel.layer setCornerRadius:90];
-    
-//    self.sliceColors =[NSArray arrayWithObjects:
-//                       [UIColor colorWithRed:246/255.0 green:155/255.0 blue:0/255.0 alpha:1],
-//                       [UIColor colorWithRed:129/255.0 green:195/255.0 blue:29/255.0 alpha:1],
-//                       [UIColor colorWithRed:62/255.0 green:173/255.0 blue:219/255.0 alpha:1],
-//                       [UIColor colorWithRed:229/255.0 green:66/255.0 blue:115/255.0 alpha:1],
-//                       [UIColor colorWithRed:148/255.0 green:141/255.0 blue:139/255.0 alpha:1],nil];
     
     
     UIColor *color1= [[Utilities shareManager]backgroundColorWithAlpha:0.2];
@@ -84,14 +103,59 @@
                        color1,
                        color2,color3,color4,color5,nil];
 
+
+    df=[[NSDateFormatter alloc]init];
+    [df setDateFormat:@"E MM-dd-yy"];
     
+    if(dataSource.count<=0)
+    {
+        self.noExpenseLabel.hidden=NO;
+        self.summaryTable.hidden=YES;
+        self.pieChart.hidden=YES;
+        
+    }
+    else
+    {
+        self.noExpenseLabel.hidden=YES;
+        self.summaryTable.hidden=NO;
+        self.pieChart.hidden=NO;
+    }
+
     
-    //rotate up arrow
-   // self.downArrow.transform = CGAffineTransformMakeRotation(M_PI);
+   
+}
+-(void)adjustTable
+{
     
-    // table
+    self.subtitleLabel.text=[[Utilities shareManager]getDateOfMonth:currentDate];
     
+    NSLog(@"new date is %@",currentDate);
     
+    [dataSource removeAllObjects];
+    
+    dataSource=[[Model fetchDataFromTable:ExpenseSheetDetailTable withStartDate:[self getFirstDateOfMonth:currentDate] andEndDate:[self getLastDateOfMonth:currentDate]] mutableCopy];
+    
+    [self getGraphInfo];
+
+    
+    [self.summaryTable reloadData];
+    [self.pieChart reloadData];
+
+    if(dataSource.count<=0)
+    {
+        self.noExpenseLabel.hidden=NO;
+        self.summaryTable.hidden=YES;
+        self.pieChart.hidden=YES;
+        
+    }
+    else
+    {
+        self.noExpenseLabel.hidden=YES;
+        self.summaryTable.hidden=NO;
+        self.pieChart.hidden=NO;
+    }
+    
+   
 
 }
 #pragma mark -
@@ -101,16 +165,41 @@
     
       [self dismissViewControllerAnimated:YES completion:nil];
 }
+#pragma mark -
+#pragma mark === Gestures ===
+#pragma mark -
+-(void)leftSwipeHandler:(UIGestureRecognizer *)gestureRecognizer
+{
+ // next
+    
+    if(![currentDate isEqualToDate:[self getFirstDateOfMonth:[NSDate date]]])
+    {
+    
+    currentDate=[self getPreviousOrNextMonthDateFrom:currentDate andCarry:1];
+
+    [self adjustTable];
+    }
+    
+    
+}
+-(void)rightSwipeHandler:(UIGestureRecognizer *)gestureRecognizer
+{
+    // previous
+   
+    currentDate=[self getPreviousOrNextMonthDateFrom:currentDate andCarry:-1];
+
+    [self adjustTable];
+}
 #pragma mark - XYPieChart Data Source
 
 - (NSUInteger)numberOfSlicesInPieChart:(XYPieChart *)pieChart
 {
-    return self.slices.count;
+    return categoriesList.count;
 }
 
 - (CGFloat)pieChart:(XYPieChart *)pieChart valueForSliceAtIndex:(NSUInteger)index
 {
-    return [[self.slices objectAtIndex:index] intValue];
+    return [[occuranceList objectAtIndex:index] intValue];
 }
 
 - (UIColor *)pieChart:(XYPieChart *)pieChart colorForSliceAtIndex:(NSUInteger)index
@@ -136,23 +225,154 @@
 {
     NSLog(@"did select slice at index %lu",(unsigned long)index);
     //self.selectedSliceLabel.text = [NSString stringWithFormat:@"$%@",[self.slices objectAtIndex:index]];
-}
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
+    
+    MBProgressHUD *hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    hud.mode=MBProgressHUDModeText;
+    
+    hud.labelFont=[UIFont fontWithName:@"Arial" size:16];
+    
+    hud.center=self.view.center;
+    
+    hud.labelText=[categoriesList objectAtIndex:index];
+    
+    [hud sizeToFit];
+    
+    hud.removeFromSuperViewOnHide=YES;
+    
+    [hud hide:YES afterDelay:0.3];
 
+}
+#pragma mark - UITableview
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     SummaryCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SummaryCell" forIndexPath:indexPath];
     
-    UIView *selectedBackgorundView=[[UIView alloc]initWithFrame:cell.bounds];
-    selectedBackgorundView.backgroundColor=[UIColor colorWithRed:234.0/255.0 green:235.0/255.0 blue:240.0/255.0 alpha:1.0];
-    cell.selectedBackgroundView=selectedBackgorundView;
+    if(indexPath.row==0)
+    {
+        cell.backgroundColor=[UIColor colorWithRed:234.0/255.0 green:235.0/255.0 blue:240.0/255.0 alpha:1.0];
+        cell.dateLabel.text=@"Date";
+        cell.categoryLabel.text=@"Expense Type";
+        cell.amountLabel.text=@"Amount";
+    }
+    else
+    {
+        
+        cell.backgroundColor=[UIColor clearColor];
+        NSManagedObject *expense=[dataSource objectAtIndex:indexPath.row-1];
+        cell.dateLabel.text=[df stringFromDate:[expense valueForKey:ExpenseDate]];
+         NSLog(@"expense date is %@",[expense valueForKey:ExpenseDate]);
+        cell.categoryLabel.text=[expense valueForKey:ExpenseType];
+        cell.amountLabel.text=[NSString stringWithFormat:@"%@",[expense valueForKey:Amount]];
+    }
+    
+   
     return cell;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    return 10;
+    return dataSource.count+1;
+}
+#pragma mark - Date Methods
+-(NSDate *)getLastDateOfMonth:(NSDate *)givenDate
+{
+    NSDate *now = [NSDate new];
+    
+    // get last day of the current month
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+   // [calendar setTimeZone:[NSTimeZone localTimeZone]];
+    
+    NSRange dayRange = [ calendar rangeOfUnit:NSCalendarUnitDay
+                                       inUnit:NSCalendarUnitMonth
+                                      forDate:now];
+    
+    NSInteger numberOfDaysInCurrentMonth = dayRange.length;
+    
+    NSDateComponents *comp = [calendar components:
+                              NSCalendarUnitYear |
+                              NSCalendarUnitMonth |
+                              NSCalendarUnitDay fromDate:givenDate];
+    
+    comp.day = numberOfDaysInCurrentMonth;
+    comp.hour = 24;
+    comp.minute = 0;
+    comp.second = 0;
+    
+    NSDate *endOfMonth = [calendar dateFromComponents:comp];
+    
+    return endOfMonth;
+}
+-(NSDate *)getFirstDateOfMonth:(NSDate *)givenDate
+{
+   // NSDate *now = [NSDate new];
+    
+    // get last day of the current month
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+  //  [calendar setTimeZone:[NSTimeZone localTimeZone]];
+    
+   // NSRange dayRange = [ calendar rangeOfUnit:NSCalendarUnitDay
+                                  //     inUnit:NSCalendarUnitMonth
+                                    //  forDate:now];
+    
+   // NSInteger numberOfDaysInCurrentMonth = dayRange.length;
+    
+    
+    
+    NSDateComponents *comp = [calendar components:
+                              NSCalendarUnitYear |
+                              NSCalendarUnitMonth |
+                              NSCalendarUnitDay fromDate:givenDate];
+    
+    comp.day = 1;
+    comp.hour = 24;
+    comp.minute = 0;
+    comp.second = 0;
+    
+    NSDate *startOfMonth = [calendar dateFromComponents:comp];
+    
+    return startOfMonth;
 }
 
-
+-(void)getGraphInfo
+{
+    
+    [categoriesList removeAllObjects];
+    [occuranceList removeAllObjects];
+    
+    for(int i=0;i<dataSource.count;i++)
+    {
+        NSManagedObject *expense=[dataSource objectAtIndex:i];
+        if(![categoriesList containsObject:[expense valueForKey:ExpenseType]])
+        {
+            [categoriesList addObject:[expense valueForKey:ExpenseType]];
+            [occuranceList addObject:[NSNumber numberWithInt:1]];
+            
+        }
+        else
+        {
+            NSInteger index=[categoriesList indexOfObject:[expense valueForKey:ExpenseType]];
+            int prevOccurance=[[occuranceList objectAtIndex:index] intValue];
+            [occuranceList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:prevOccurance+1]];
+            
+            
+        }
+    }
+}
+-(NSDate *)getPreviousOrNextMonthDateFrom:(NSDate *)date andCarry:(int)carry
+{
+    NSCalendar *gregorian=[NSCalendar currentCalendar];
+    
+    NSDateComponents *comps=[[NSDateComponents alloc]init];
+    
+    [comps setMonth:carry];
+    
+  NSDate *newDate=[gregorian dateByAddingComponents:comps toDate:date options:0];
+    
+    NSLog(@"returned date is %@",newDate);
+    return newDate;
+    
+}
 @end

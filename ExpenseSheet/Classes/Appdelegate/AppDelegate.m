@@ -14,6 +14,10 @@
 @interface AppDelegate ()
 @end
 @implementation AppDelegate
+{
+    UINavigationController *navigationController;
+    UIStoryboard *storyboard;
+}
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -35,7 +39,7 @@
     UIApplicationShortcutItem *shortcutItem = [launchOptions objectForKey:UIApplicationLaunchOptionsShortcutItemKey];
     
     // notifications handling
-    [self registerForLocalNotifications];
+  //  [self registerForLocalNotifications];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification)
     {
@@ -49,9 +53,9 @@
         }
         else
         {
-           UINavigationController *navigationController= (UINavigationController *)self.window.rootViewController;
+           navigationController= (UINavigationController *)self.window.rootViewController;
             
-            UIStoryboard *storyboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            storyboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
             HomeViewController *homevc=[storyboard instantiateViewControllerWithIdentifier:@"homeVC"];
             [navigationController setViewControllers:@[homevc] animated:NO];
     
@@ -289,6 +293,16 @@
     
     handled = YES;
     
+    if([shortcutItem.type isEqualToString:@"Create New Expense Sheet"])
+    {
+        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:ShouldShowCreateSheetView];
+        [self navigateTowardCreateExpenseSheetView];
+    }
+    else
+    {
+        // show current expense sheet detail
+    }
+    
     return handled;
     
 }
@@ -300,5 +314,42 @@
     //NSUserDefaults *mySharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:AppGroupName];
     // Use the shared user defaults object to update the user's account
      //   [mySharedDefaults setObject:nil forKey:@"task"];
+}
+-(void)navigateTowardCreateExpenseSheetView
+{
+    navigationController= (UINavigationController *)self.window.rootViewController;
+    storyboard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    NSLog(@"visible view controller is %@",navigationController.visibleViewController);
+    
+   BOOL isModel= [self isModal];
+    
+    if(isModel)
+    {
+        if (navigationController.visibleViewController.isViewLoaded && navigationController.visibleViewController.view.window){
+            // viewController is visible
+            [navigationController.visibleViewController dismissViewControllerAnimated:NO completion:nil];
+        }
+        else
+        {
+             [navigationController.visibleViewController dismissViewControllerAnimated:NO completion:nil];
+            [navigationController.visibleViewController dismissViewControllerAnimated:NO completion:nil];
+        }
+        
+    }
+      [navigationController popToViewController:[navigationController.viewControllers objectAtIndex:1] animated:YES];
+    
+}
+- (BOOL)isModal {
+    if([navigationController.visibleViewController presentingViewController])
+        return YES;
+   if([[navigationController presentingViewController] presentedViewController] == navigationController.visibleViewController)
+      return YES;
+    if([[navigationController presentingViewController] presentedViewController] == navigationController)
+    return YES;
+    //if([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
+      //  return YES;
+    
+    return NO;
 }
 @end

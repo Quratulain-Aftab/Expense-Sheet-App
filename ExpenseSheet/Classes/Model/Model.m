@@ -31,11 +31,78 @@
     NSArray*  dataArray = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     return dataArray;
 }
-+(NSArray *)fetchDataFromTable:(NSString *)tableName withPredicateName:(NSString *)predicateField andValue:(NSString *)predicateValue
++(NSArray *)fetchDataFromTable:(NSString *)tableName withPredicateName:(NSString *)predicateField andValue:(NSArray *)predicateValue andType:(int)dataType
 {
+    
+    
     NSManagedObjectContext *managedObjectContext = [Model managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:tableName];
+    
+    NSPredicate *predicate;
+    
+     // 0:bool, number
+     // 1:date
+     // 2:string
+    
+    switch (dataType) {
+        case 0:
+            predicate=[NSPredicate predicateWithFormat:@"%@==%@",predicateField,[predicateValue objectAtIndex:0]];
+
+            break;
+            
+        case 1:
+              predicate=[NSPredicate predicateWithFormat:@"%@=%@",predicateField,[predicateValue objectAtIndex:0]];
+            break;
+            
+        case 2:
+            predicate=[NSPredicate predicateWithFormat:@"%@ like %@",predicateField,[predicateValue objectAtIndex:0]];
+            break;
+            
+        default:
+            break;
+    }
+   
     NSArray*  dataArray = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     return dataArray;
 }
++(NSArray *)fetchDataFromTable:(NSString *)tableName withStartDate:(NSDate *)startDate andEndDate:(NSDate *)endDate
+{
+    NSManagedObjectContext *managedObjectContext = [Model managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:tableName];
+
+     NSPredicate *predicate=[NSPredicate predicateWithFormat:@"(expenseDate>=%@ AND expenseDate<=%@)",startDate,endDate];
+   [fetchRequest setPredicate:predicate];
+    NSError *error;
+    NSArray*  dataArray = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if(error)
+    {
+        NSLog(@"error is %@",error);
+        return nil;
+    }
+    return dataArray;
+}
++(NSArray *)fetchDistinctDataFromTable:(NSString *)tableName withStartDate:(NSDate *)startDate andEndDate:(NSDate *)endDate
+{
+    NSManagedObjectContext *managedObjectContext = [Model managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:tableName];
+    
+    
+    
+    NSPredicate *predicate=[NSPredicate predicateWithFormat:@"(expenseDate>=%@ AND expenseDate<=%@)",startDate,endDate];
+   // [fetchRequest setPredicate:predicate];
+    
+    [fetchRequest setPropertiesToFetch:[NSArray arrayWithObjects:@"expenseType", @"expenseDate", nil]];
+    [fetchRequest setPropertiesToGroupBy:[NSArray arrayWithObject:@"expenseType"]];
+    [fetchRequest setResultType:NSDictionaryResultType];
+    [fetchRequest setPredicate:predicate];
+    NSError *error;
+    NSArray*  dataArray = [managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if(error)
+    {
+        NSLog(@"error is %@",error);
+        return nil;
+    }
+    return dataArray;
+}
+
 @end

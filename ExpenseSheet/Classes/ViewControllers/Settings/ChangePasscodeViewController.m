@@ -118,8 +118,8 @@
     }
     if(textField==self.previousField)
     {
-        NSString *currentString = [self.previousField.text stringByReplacingCharactersInRange:range withString:string];
-        int length = (int)[currentString length];
+     //   NSString *currentString = [self.previousField.text stringByReplacingCharactersInRange:range withString:string];
+      //  int length = (int)[currentString length];
         if(self.previousField.text.length>2)
         {
             self.previousPasscodeDoneButton.enabled=true;

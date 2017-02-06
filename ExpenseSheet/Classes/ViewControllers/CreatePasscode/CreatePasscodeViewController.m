@@ -89,7 +89,7 @@
 }
 -(bool)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-     NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+   //  NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if(string.length==0)
     {
         return YES;

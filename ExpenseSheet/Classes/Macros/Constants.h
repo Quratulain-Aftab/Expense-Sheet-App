@@ -61,6 +61,7 @@
 #define DidSettingsChangedUserDefault    @"settingsChanged"  //bool
 #define TouchIDUserDefault               @"useTouchID"       // bool
 #define PasscodeUserDefault              @"Passcode"         // string
+#define ShouldShowCreateSheetView        @"showCreateSheetView"
 
 #pragma mark - File Names
 #define SettingsFileName                 @"Settings.plist"

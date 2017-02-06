@@ -49,5 +49,17 @@
     
       [self dismissViewControllerAnimated:YES completion:nil];
 }
+- (IBAction)websiteLinkButtonAction:(id)sender {
+    
+    NSURL *oracularURL=[NSURL URLWithString:@"http://www.oracular.com"];
+    
+    if ( [[UIApplication sharedApplication] canOpenURL:oracularURL])
+        
+    {
+        [[UIApplication sharedApplication] openURL:oracularURL];
+        
+    }
+    
+}
 
 @end

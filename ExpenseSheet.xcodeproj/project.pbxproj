@@ -36,6 +36,7 @@
 		82827D9E1E3A12940073F8FF /* SummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827D9D1E3A12940073F8FF /* SummaryViewController.m */; };
 		82827DA21E3A1A280073F8FF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827DA11E3A1A280073F8FF /* XYPieChart.m */; };
 		82827DA51E3A28AD0073F8FF /* SummaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 82827DA41E3A28AD0073F8FF /* SummaryCell.m */; };
+		82CC2E151E4061E60059E8EF /* LocalNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 82CC2E141E4061E60059E8EF /* LocalNotifications.m */; };
 		A4004C571E260F5200FFB380 /* WeekStartDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4004C561E260F5200FFB380 /* WeekStartDayViewController.m */; };
 		A4004C591E26142D00FFB380 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4004C581E26142D00FFB380 /* Settings.plist */; };
 		A4004C5C1E262F6900FFB380 /* RescheduleNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = A4004C5B1E262F6900FFB380 /* RescheduleNotifications.m */; };
@@ -145,6 +146,8 @@
 		82827DA11E3A1A280073F8FF /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		82827DA31E3A28AD0073F8FF /* SummaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummaryCell.h; sourceTree = "<group>"; };
 		82827DA41E3A28AD0073F8FF /* SummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummaryCell.m; sourceTree = "<group>"; };
+		82CC2E131E4061E60059E8EF /* LocalNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNotifications.h; sourceTree = "<group>"; };
+		82CC2E141E4061E60059E8EF /* LocalNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNotifications.m; sourceTree = "<group>"; };
 		A4004C551E260F5200FFB380 /* WeekStartDayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekStartDayViewController.h; sourceTree = "<group>"; };
 		A4004C561E260F5200FFB380 /* WeekStartDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekStartDayViewController.m; sourceTree = "<group>"; };
 		A4004C581E26142D00FFB380 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Settings.plist; path = ../Settings.plist; sourceTree = "<group>"; };
@@ -394,6 +397,8 @@
 			children = (
 				5AC03DF61E1679D8008AF52A /* Utilities.h */,
 				5AC03DF71E1679D8008AF52A /* Utilities.m */,
+				82CC2E131E4061E60059E8EF /* LocalNotifications.h */,
+				82CC2E141E4061E60059E8EF /* LocalNotifications.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -749,6 +754,7 @@
 				5AECD2AC1E1B8B87000CA3F8 /* SettingsViewController.m in Sources */,
 				5A860B0D1E140E8A00B44D49 /* CreateViewCell2.m in Sources */,
 				A4F218F71E309360001A3158 /* SettingsCell.m in Sources */,
+				82CC2E151E4061E60059E8EF /* LocalNotifications.m in Sources */,
 				5A860B0C1E140E8A00B44D49 /* CreateViewCell1.m in Sources */,
 				5ACEFFEF1E14160800C3FCD4 /* ExpenseSheet.xcdatamodeld in Sources */,
 				5ACEFFEC1E14156400C3FCD4 /* MBProgressHUD.m in Sources */,

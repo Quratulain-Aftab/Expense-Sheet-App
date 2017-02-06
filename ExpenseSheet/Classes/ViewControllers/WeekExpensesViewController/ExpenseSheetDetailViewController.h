@@ -55,4 +55,5 @@
 @property (strong, nonatomic) IBOutlet UIView *receiptsListView;
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
+@property (weak, nonatomic) IBOutlet UILabel *noExpenseSheetFoundLabel;
 @end

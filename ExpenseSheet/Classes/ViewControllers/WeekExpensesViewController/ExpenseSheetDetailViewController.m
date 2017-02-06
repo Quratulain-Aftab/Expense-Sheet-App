@@ -799,6 +799,7 @@
 #pragma mark - Searchbar Delegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+     [self.view bringSubviewToFront:self.weeklyTable];
     isFilteredData=true;
     
     searchResults = [[NSMutableArray alloc] init];
@@ -840,7 +841,15 @@
 }
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    isFilteredData=true;
+//    if(searchText.length>0)
+//    {
+        isFilteredData=true;
+//    }
+//    else
+//    {
+//        isFilteredData=false;
+//    }
+    
     
     searchResults = [[NSMutableArray alloc] init];
     
@@ -856,9 +865,18 @@
         
         }
     }
+    
+    if(searchText.length==0)
+    {
+        [searchResults addObjectsFromArray:self.dataSource];
+    }
     if(searchResults.count>0)
     {
-        
+        [self.view bringSubviewToFront:self.weeklyTable];
+    }
+    else
+    {
+         [self.view bringSubviewToFront:self.noExpenseSheetFoundLabel];
     }
     
     [self.weeklyTable reloadData];
@@ -884,6 +902,7 @@
 //    self.searchbar.text=@"";
 //    isFilteredData=false;
 //    [self.weeklyTable reloadData];
+     [self.view bringSubviewToFront:self.weeklyTable];
     
     [self.searchbar resignFirstResponder];
     [self.searchbar setShowsCancelButton:NO animated:YES];
@@ -945,7 +964,7 @@
     // register for 3D Touch (if available)
     if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
         
-        [self registerForPreviewingWithDelegate:(id)self sourceView:self.view];
+        [self registerForPreviewingWithDelegate:(id)self sourceView:self.weeklyTable];
         NSLog(@"3D Touch is available! Hurra!");
         
         // no need for our alternative anymore

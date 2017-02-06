@@ -224,5 +224,17 @@
     
     [dictionary writeToFile:docfilePath atomically:YES];
 }
+// Date
+-(NSString *)getDateOfMonth:(NSDate *)date
+{
+    static NSDateFormatter *dateFormaater;
+    if(!dateFormaater){
+        dateFormaater = [[NSDateFormatter alloc] init];
+        NSLocale* en_AU_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:@"en_AU_POSIX"];
+        [dateFormaater setLocale:en_AU_POSIX];
+        [dateFormaater setDateFormat:@"MMMM, yyyy"];
+    }
+    return [dateFormaater stringFromDate:date];
+}
 
 @end

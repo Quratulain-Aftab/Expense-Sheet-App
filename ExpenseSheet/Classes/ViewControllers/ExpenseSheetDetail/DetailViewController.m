@@ -388,7 +388,7 @@
         
     }];
     
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         
         
         
@@ -422,16 +422,16 @@
         return;
     }
     
-    UIAlertController *alert=[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert=[UIAlertController alertControllerWithTitle:nil message:@"Select Project" preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Project name 1" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *name1Action = [UIAlertAction actionWithTitle:@"Project name 1" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
         [self.projectButton setTitle:@"Project name 1" forState:UIControlStateNormal]
         ;
        self.previousProject=@"Project name 1";
         
     }];
-    UIAlertAction *Ok = [UIAlertAction actionWithTitle:@"Project name 2" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *name2Action = [UIAlertAction actionWithTitle:@"Project name 2" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
         [self.projectButton setTitle:@"Project name 2" forState:UIControlStateNormal]
         ;
@@ -439,7 +439,7 @@
         
     }];
     
-    UIAlertAction *yes = [UIAlertAction actionWithTitle:@"Project name 3" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *name3Action = [UIAlertAction actionWithTitle:@"Project name 3" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
         [self.projectButton setTitle:@"Project name 3" forState:UIControlStateNormal]
         ;
@@ -447,19 +447,25 @@
         
         
     }];
-    UIAlertAction *no = [UIAlertAction actionWithTitle:@"Project name 4" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *name4Action = [UIAlertAction actionWithTitle:@"Project name 4" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
         [self.projectButton setTitle:@"Project name 4" forState:UIControlStateNormal]
         ;
         self.previousProject=@"Project name 4";
         
     }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        
+        
+    }];
+    
+    [alert addAction:name1Action];
+    [alert addAction:name2Action];
+    [alert addAction:name3Action];
+    [alert addAction:name4Action];
     
     [alert addAction:cancelAction];
-    [alert addAction:Ok];
-    [alert addAction:yes];
-    
-    [alert addAction:no];
     
     
     [self presentViewController:alert animated:YES completion:nil];
@@ -548,7 +554,7 @@
     [self.expenseTypeTable setAllowsSelection:YES];
     self.alertcontroller = [UIAlertController alertControllerWithTitle:titletext message:nil preferredStyle:UIAlertControllerStyleAlert];
     [self.alertcontroller setValue:controller forKey:@"contentViewController"];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:canceltext style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:canceltext style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
         
     }];
     [self.alertcontroller addAction:cancelAction];
@@ -1060,6 +1066,7 @@
         CombineViewController *combineVc=segue.destinationViewController;
         combineVc.existingCustomer=self.previousCustomer;
         combineVc.existingProject=self.previousProject;
+        combineVc.delegate=self;
     }
 }
 @end

@@ -79,6 +79,13 @@
     [self applySettings];
     
     
+    if([[NSUserDefaults standardUserDefaults]boolForKey:ShouldShowCreateSheetView])
+    {
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:ShouldShowCreateSheetView];
+        
+        [self addSheetButtonAction:nil];
+    }
+    
   }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -87,13 +94,20 @@
   animationTimer=[NSTimer scheduledTimerWithTimeInterval:0.005 target:self selector:@selector(AnimationTimerHandler:) userInfo:nil repeats:YES];
 
 }
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+     [super viewWillDisappear:animated];
+     self.mainview.hidden=NO;
+     [self.myExpenseSheetsView removeFromSuperview];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 - (void)dealloc
 {
+  
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIContentSizeCategoryDidChangeNotification
                                                   object:nil];
@@ -236,6 +250,39 @@
     }
     
     [self.sheetsListTable reloadData];
+    if(self.segmentView.selectedSegmentIndex==0)
+    {
+        if(montharray.count>0)
+        {
+            self.sheetsListTable.hidden=NO;
+            self.noexpensesheetSegmentLabel.hidden=YES;
+        }
+        else
+        {
+            self.sheetsListTable.hidden=YES;
+            self.noexpensesheetSegmentLabel.hidden=NO;
+            self.noexpensesheetSegmentLabel.text=@"No expense sheet this month";
+        }
+    }
+    else if (self.segmentView.selectedSegmentIndex==1)
+    {
+        if(self.dataSource.count>0)
+        {
+            self.sheetsListTable.hidden=NO;
+            self.noexpensesheetSegmentLabel.hidden=YES;
+        }
+        else
+        {
+            self.sheetsListTable.hidden=YES;
+            self.noexpensesheetSegmentLabel.hidden=NO;
+            self.noexpensesheetSegmentLabel.text=@"No expense sheet Found";
+        }
+    }
+
+    
+    
+    
+    
     [self.CurrentWeekTable reloadData];
     if(self.dataSource.count>0)
     {
@@ -287,6 +334,15 @@
 }
 - (IBAction)addSheetButtonAction:(id)sender
 {
+    self.editSheetsTitleLabel.hidden=YES;
+    self.segmentView.hidden=NO;
+    [self.editButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
+    [self.sheetsListTable setEditing:NO];
+    self.editButton.tag=100;
+    self.sheetsListEditButtonWidth.constant=22.0;
+    
+    
+    
     self.pickerviewLabel.text=[self getWeekStartDayStringFromDate:[NSDate date] andFormate:@"E dd-MM-yyyy"];
     self.createDatePicker.date=[NSDate date];
     
@@ -412,7 +468,6 @@
         self.editButton.tag=101;
         self.sheetsListEditButtonWidth.constant=35.0;
         self.editSheetsTitleLabel.hidden=NO;
-     //   self.closeListButton.hidden=YES;
         self.segmentView.hidden=YES;
         [self.sheetsListTable setEditing:YES animated:YES];
         [self.editButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -425,7 +480,6 @@
         [self.editButton setTitle:@"" forState:UIControlStateNormal];
         [self.editButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
         self.editSheetsTitleLabel.hidden=YES;
-       // self.closeListButton.hidden=NO;
         self.segmentView.hidden=NO;
         [self.view layoutSubviews];
         [self.sheetsListTable setEditing:NO animated:YES];
@@ -453,15 +507,21 @@
     
     if(self.segmentView.selectedSegmentIndex==0)
     {
-        if(self.dataSource.count>0)
+        if(montharray.count>0)
         {
             self.sheetsListTable.hidden=NO;
             self.noexpensesheetSegmentLabel.hidden=YES;
         }
+        else
+        {
+            self.sheetsListTable.hidden=YES;
+            self.noexpensesheetSegmentLabel.hidden=NO;
+            self.noexpensesheetSegmentLabel.text=@"No expense sheet this month";
+        }
     }
     else if (self.segmentView.selectedSegmentIndex==1)
     {
-        if(montharray.count>0)
+        if(self.dataSource.count>0)
         {
             self.sheetsListTable.hidden=NO;
              self.noexpensesheetSegmentLabel.hidden=YES;
@@ -470,7 +530,7 @@
         {
              self.sheetsListTable.hidden=YES;
              self.noexpensesheetSegmentLabel.hidden=NO;
-            self.noexpensesheetSegmentLabel.text=@"No expense sheet this month";
+            self.noexpensesheetSegmentLabel.text=@"No expense sheet Found";
         }
     }
     else{
@@ -773,7 +833,7 @@
     }
     
         UIView *selectedBackgorundView=[[UIView alloc]initWithFrame:cell.bounds];
-        selectedBackgorundView.backgroundColor=[UIColor lightGrayColor];
+        selectedBackgorundView.backgroundColor=[UIColor clearColor];
         cell.selectedBackgroundView=selectedBackgorundView;
        return cell;
     }
@@ -1179,7 +1239,7 @@
     
      NSDate *minDate = [[NSCalendar currentCalendar] dateByAddingComponents:comps toDate:currentDate  options:0];
     
-    self.createDatePicker.minimumDate = minDate;
+   // self.createDatePicker.minimumDate = minDate;
     self.createDatePicker.maximumDate = currentDate;
     [self.pickerbackview setFrame:CGRectMake( self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [self.view addSubview:self.pickerbackview];
