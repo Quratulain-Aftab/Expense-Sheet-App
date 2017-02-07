@@ -1,0 +1,12 @@
+PODS:
+  - imglyKit (6.1.3)
+
+DEPENDENCIES:
+  - imglyKit (~> 6.1)
+
+SPEC CHECKSUMS:
+  imglyKit: 997b4eb548b9a458737dbe7caee7fc98f61603e6
+
+PODFILE CHECKSUM: 85b16c3c7e0e8bab41201acb55228b7fc57cdc8a
+
+COCOAPODS: 1.2.0
